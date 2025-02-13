@@ -1,0 +1,70 @@
+version: "3.8"
+
+services:
+  nginx:
+    build:
+      context: nginx/
+      args:
+        HTTP_PROXY: ${HTTP_PROXY}
+        HTTPS_PROXY: ${HTTPS_PROXY}
+    container_name: nginx
+    depends_on:
+      - adminer
+      - client
+      - server
+    ports:
+      - "80:80"
+    networks:
+      trans:
+
+  server:
+    build:
+      context: server/
+      args:
+        HTTP_PROXY: ${HTTP_PROXY}
+        HTTPS_PROXY: ${HTTPS_PROXY}
+    container_name: server
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./server:/app
+    networks:
+      trans:
+
+  client:
+    build:
+      context: client/
+      args:
+        HTTP_PROXY: ${HTTP_PROXY}
+        HTTPS_PROXY: ${HTTPS_PROXY}
+    container_name: client
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    depends_on:
+      - server
+    networks:
+      trans:
+
+  adminer:
+    build:
+      context: adminer/
+      args:
+        HTTP_PROXY: ${HTTP_PROXY}
+        HTTPS_PROXY: ${HTTPS_PROXY}
+    container_name: adminer
+    ports:
+      - "8080:8080"
+    depends_on:
+      - server
+    networks:
+      trans:
+
+volumes:
+  db-store:
+
+networks:
+  trans:
+    driver: bridge

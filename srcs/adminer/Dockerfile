@@ -1,0 +1,4 @@
+FROM adminer:latest
+
+ARG HTTP_PROXY
+ARG HTTPS_PROXY
