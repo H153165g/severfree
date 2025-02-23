@@ -13,7 +13,7 @@ async function requestPermissions() {
   return true;
 }
 
-// 🔹 通知のリスナーをセットアップ（コンポーネント内で使用）
+// 通知のリスナーをセットアップ（コンポーネント内で使用）
 export function useNotificationListener() {
   useEffect(() => {
     // 権限をリクエスト
@@ -33,8 +33,8 @@ export function useNotificationListener() {
   }, []);
 }
 
-// 🔹 通知を送信する関数
-export async function sendNotification() {
+// 通知を送信する関数
+export async function sendNotification(hours, minutes, seconds) {
   console.log("通知を送信します...");
 
   const permissionsGranted = await requestPermissions();
@@ -43,22 +43,24 @@ export async function sendNotification() {
     return;
   }
 
-  // カスタム音を設定して通知をスケジュール
-  const notification = await Notifications.scheduleNotificationAsync({
+  // 通知をスケジュールする際にトリガーを指定
+  await Notifications.scheduleNotificationAsync({
     content: {
       title: "お知らせ",
       body: "これはテスト通知です",
-      sound: "asset:/sounds/notification_sound.mp3", // ここで音を設定
+      badge: 1,
     },
-    trigger: { seconds: 5 }, // 5秒後に通知
+    trigger: {
+      hours: hours,
+      minutes: minutes,
+      seconds: seconds,
+    },
   });
-
-  console.log("通知をスケジュールしました", notification);
 }
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
     shouldPlaySound: false,
-    shouldSetBadge: false,
+    shouldSetBadge: true,
   }),
 });
