@@ -4,11 +4,20 @@ import { useEffect } from "react";
 // 通知の権限をリクエスト
 async function requestPermissions() {
   console.log("通知の権限をリクエスト中...");
-  const { status } = await Notifications.getPermissionsAsync();
+
+  let { status } = await Notifications.getPermissionsAsync();
+
   if (status !== "granted") {
-    console.log("通知の権限がありません");
-    return false; // 権限が許可されていない場合、falseを返す
+    console.log("通知の権限がないため、リクエストを送信...");
+    const { status: newStatus } = await Notifications.requestPermissionsAsync();
+    status = newStatus; // 更新
   }
+
+  if (status !== "granted") {
+    console.log("通知の権限が拒否されました");
+    return false;
+  }
+
   console.log("通知の権限が許可されました");
   return true;
 }
@@ -48,7 +57,7 @@ export async function sendNotification() {
     content: {
       title: "お知らせ",
       body: "これはテスト通知です",
-      sound: "asset:/sounds/notification_sound.mp3", // ここで音を設定
+      // sound: "asset:/sounds/notification_sound.mp3", // ここで音を設定
     },
     trigger: { seconds: 5 }, // 5秒後に通知
   });
