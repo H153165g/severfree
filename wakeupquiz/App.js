@@ -1,18 +1,18 @@
 import { useEffect, useRef } from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import * as Notifications from "expo-notifications";
 import * as Permissions from "expo-permissions";
 import Problem from "./src/pages/Problem";
 import Result from "./src/pages/Result";
 import Home from "./src/pages/Home";
 import { navigationRef } from "./src/components/navigationRef";
-
-const Tab = createBottomTabNavigator();
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 export default function App() {
   const notificationListener = useRef();
   const responseListener = useRef();
+
+  const Stack = createNativeStackNavigator();
 
   useEffect(() => {
     // 通知の権限をリクエスト
@@ -48,11 +48,11 @@ export default function App() {
 
   return (
     <NavigationContainer ref={navigationRef}>
-      <Tab.Navigator>
-        <Tab.Screen name="Home" component={Home} />
-        <Tab.Screen name="Problem" component={Problem} />
-        <Tab.Screen name="Result" component={Result} />
-      </Tab.Navigator>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Problem" component={Problem} />
+        <Stack.Screen name="Result" component={Result} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }
