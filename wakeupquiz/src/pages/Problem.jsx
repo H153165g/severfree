@@ -1,10 +1,11 @@
 import { Text, View, Button } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { sendNotification } from "../components/Alarm";
+import { timeGetter } from "../components/Time";
 const Problem = () => {
   const navigation = useNavigation();
   const handleSendNotification = () => {
-    sendNotification(); // 通知を送る
+    timeGetter(22, 21); // 通知を送る
   };
   return (
     <View>
