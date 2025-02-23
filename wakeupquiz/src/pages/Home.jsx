@@ -1,9 +1,19 @@
-import { View } from "react-native"
+import { useNavigation } from "@react-navigation/native";
+import { View, Button } from "react-native";
 
 const Home = () => {
-  return (
-    <View></View>
-  )
-}
+  const navigation = useNavigation();
 
-export default Home
+  return (
+    <View>
+      <Button
+        title="Go to Result"
+        onPress={() => {
+          navigation.navigate("Result");
+        }}
+      />
+    </View>
+  );
+};
+
+export default Home;
