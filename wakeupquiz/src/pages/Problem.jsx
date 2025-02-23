@@ -1,6 +1,10 @@
 import { Text, View, Button } from 'react-native'
+import { useNavigation } from '@react-navigation/native';
 
-const Problem = ({ navigation }) => {
+const Problem = () => {
+
+  const navigation = useNavigation();
+  
   return (
     <View>
       <Text>Problem</Text>
