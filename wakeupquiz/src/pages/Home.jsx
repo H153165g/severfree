@@ -65,12 +65,6 @@ const Home = () => {
         currentSettings={settings}
       />
 
-      <TouchableOpacity style={styles.alarmButton} onPress={handleToggleAlarm}>
-        <Text style={styles.alarmButtonText}>
-          {alarmOn ? "アラーム停止" : "アラーム開始"}
-        </Text>
-      </TouchableOpacity>
-
       <View style={styles.buttonContainer}>
         <Button
           title="Go to Problem"
