@@ -125,7 +125,9 @@ const Problem = ({ score, setScore }) => {
             )}
             <Text style={styles.explanationText}>{currentQuiz.explanation}</Text>
             <TouchableOpacity onPress={handleNextQuestion} style={styles.nextButton}>
-              <Text style={styles.nextButtonText}>次の問題へ</Text>
+              <Text style={styles.nextButtonText}>
+                {currentQuestion === quizList.length - 1 ? "結果を見る" : "次の問題へ"}
+              </Text>
             </TouchableOpacity>
           </>
         )}
