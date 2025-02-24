@@ -1,21 +1,31 @@
-import { Text, View, Button } from 'react-native'
-import { useNavigation } from '@react-navigation/native';
+import React, { useContext } from "react";
+import { Text, View, Button } from "react-native";
+import { AlarmContext } from "../hooks/useAlarm";
+import { useNotification } from "../hooks/useNotification";
+import { QUIZ_LIST } from "../Constants";
 
-const Result = () => {
+const Result = ({ score }) => {
+  const { isAlarmOn, toggleAlarm } = useContext(AlarmContext);
+  const { cancelAllNotifications } = useNotification();
 
-  const navigation = useNavigation();
+  const totalScore = QUIZ_LIST.length
+
+  // アラームを停止
+  const stopAlarm = async () => {
+    await cancelAllNotifications();
+    toggleAlarm(false);
+    alert("アラームが解除されました！");
+  };
 
   return (
-    <View>
-      <Text>Result</Text>
-      <Button
-        title="Go to Problem"
-        onPress={() => {
-          navigation.navigate('Problem');
-        }}
-      />
-    </View>
-  )
-}
+    <View style={{ padding: 20 }}>
+      <Text style={{ fontSize: 24 }}>あなたのスコア: {score} / {totalScore} 点</Text>
 
-export default Result
+      {isAlarmOn && (
+        <Button title="アラームを止める" onPress={stopAlarm} />
+      )}
+    </View>
+  );
+};
+
+export default Result;
