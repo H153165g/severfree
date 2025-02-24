@@ -1,16 +1,9 @@
 import React, { useState, useEffect } from "react";
-import {
-  Modal,
-  View,
-  Text,
-  TouchableOpacity,
-  Switch,
-  StyleSheet,
-} from "react-native";
+import { Modal, View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
 const SettingsSheet = ({ visible, onClose, onSave, currentSettings }) => {
-  // Convert "HH:mm" string to a Date object
+  // "HH:mm"文字列をDateオブジェクトに変換
   const parseTimeString = (timeStr) => {
     const [hours, minutes] = timeStr.split(":").map(Number);
     const now = new Date();
@@ -18,37 +11,34 @@ const SettingsSheet = ({ visible, onClose, onSave, currentSettings }) => {
     return now;
   };
 
-  // Preset options arrays for selection
-  const repeatOptions = ["Never", "Every Day", "Weekdays", "Weekends"];
-  const labelOptions = ["Alarm", "Morning Alarm", "Workout Alarm"];
-  const soundOptions = ["Radial", "Chime", "Alarm"];
+  // 各セレクト用のオプション
+  const genreOptions = ["基本情報", "応用情報"];
+  const problemsOptions = [1, 2, 3, 4];
+  const musicOptions = ["音楽1", "音楽2", "音楽3"];
 
-  // State initialization from currentSettings
+  // stateの初期化
   const [alarmTime, setAlarmTime] = useState(
     parseTimeString(currentSettings.time)
   );
-  const [repeat, setRepeat] = useState(currentSettings.repeat || "Never");
-  const [label, setLabel] = useState(currentSettings.label || "Alarm");
-  const [sound, setSound] = useState(currentSettings.sound || "Radial");
-  const [snooze, setSnooze] = useState(
-    currentSettings.snooze !== undefined ? currentSettings.snooze : true
+  const [genre, setGenre] = useState(currentSettings.genre || "Math");
+  const [problems, setProblems] = useState(
+    currentSettings.problems !== undefined ? currentSettings.problems : 1
   );
-  const [showTimePicker, setShowTimePicker] = useState(false);
+  const [music, setMusic] = useState(currentSettings.music || "Classical");
 
-  // Reset state when modal opens
+  // モーダル表示時にstateをリセット
   useEffect(() => {
     if (visible) {
       setAlarmTime(parseTimeString(currentSettings.time));
-      setRepeat(currentSettings.repeat || "Never");
-      setLabel(currentSettings.label || "Alarm");
-      setSound(currentSettings.sound || "Radial");
-      setSnooze(
-        currentSettings.snooze !== undefined ? currentSettings.snooze : true
+      setGenre(currentSettings.genre || "Math");
+      setProblems(
+        currentSettings.problems !== undefined ? currentSettings.problems : 10
       );
+      setMusic(currentSettings.music || "Classical");
     }
   }, [visible, currentSettings]);
 
-  // Convert Date to "HH:mm" format
+  // Dateオブジェクトを"HH:mm"形式に変換
   const formatTime = (date) => {
     const hours = date.getHours();
     const minutes = date.getMinutes();
@@ -64,36 +54,29 @@ const SettingsSheet = ({ visible, onClose, onSave, currentSettings }) => {
   const handleSave = () => {
     onSave({
       time: formatTime(alarmTime),
-      repeat,
-      label,
-      sound,
-      snooze,
+      genre,
+      problems,
+      music,
     });
     onClose();
   };
 
-  // Toggle selection for each option:
-  const handlePressRepeat = () => {
-    const currentIndex = repeatOptions.indexOf(repeat);
-    const nextIndex = (currentIndex + 1) % repeatOptions.length;
-    setRepeat(repeatOptions[nextIndex]);
+  const handlePressGenre = () => {
+    const currentIndex = genreOptions.indexOf(genre);
+    const nextIndex = (currentIndex + 1) % genreOptions.length;
+    setGenre(genreOptions[nextIndex]);
   };
 
-  const handlePressLabel = () => {
-    const currentIndex = labelOptions.indexOf(label);
-    const nextIndex = (currentIndex + 1) % labelOptions.length;
-    setLabel(labelOptions[nextIndex]);
+  const handlePressProblems = () => {
+    const currentIndex = problemsOptions.indexOf(problems);
+    const nextIndex = (currentIndex + 1) % problemsOptions.length;
+    setProblems(problemsOptions[nextIndex]);
   };
 
-  const handlePressSound = () => {
-    const currentIndex = soundOptions.indexOf(sound);
-    const nextIndex = (currentIndex + 1) % soundOptions.length;
-    setSound(soundOptions[nextIndex]);
-  };
-
-  const handleDeleteAlarm = () => {
-    // For demonstration, simply close the modal.
-    onClose();
+  const handlePressMusic = () => {
+    const currentIndex = musicOptions.indexOf(music);
+    const nextIndex = (currentIndex + 1) % musicOptions.length;
+    setMusic(musicOptions[nextIndex]);
   };
 
   return (
@@ -109,7 +92,6 @@ const SettingsSheet = ({ visible, onClose, onSave, currentSettings }) => {
             <TouchableOpacity onPress={handleCancel}>
               <Text style={styles.navBarButtonText}>Cancel</Text>
             </TouchableOpacity>
-            <Text style={styles.navBarTitle}>Edit Alarm</Text>
             <TouchableOpacity onPress={handleSave}>
               <Text style={styles.navBarButtonText}>Save</Text>
             </TouchableOpacity>
@@ -125,54 +107,36 @@ const SettingsSheet = ({ visible, onClose, onSave, currentSettings }) => {
                   setAlarmTime(selectedDate);
                 }
               }}
-              textColor="#fff"
+              textColor="#4B3621"
             />
           </View>
 
-          {/* Settings List with Select Buttons */}
+          {/* セレクトボタン式の各設定項目 */}
           <View style={styles.tableContainer}>
             <TouchableOpacity
               style={styles.tableRow}
-              onPress={handlePressRepeat}
+              onPress={handlePressGenre}
             >
-              <Text style={styles.tableRowLabel}>Repeat</Text>
-              <Text style={styles.tableRowValue}>{repeat}</Text>
+              <Text style={styles.tableRowLabel}>Study Genre</Text>
+              <Text style={styles.tableRowValue}>{genre}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.tableRow}
-              onPress={handlePressLabel}
+              onPress={handlePressProblems}
             >
-              <Text style={styles.tableRowLabel}>Label</Text>
-              <Text style={styles.tableRowValue}>{label}</Text>
+              <Text style={styles.tableRowLabel}>Number of Problems</Text>
+              <Text style={styles.tableRowValue}>{problems}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.tableRow}
-              onPress={handlePressSound}
+              onPress={handlePressMusic}
             >
-              <Text style={styles.tableRowLabel}>Sound</Text>
-              <Text style={styles.tableRowValue}>{sound}</Text>
+              <Text style={styles.tableRowLabel}>Music</Text>
+              <Text style={styles.tableRowValue}>{music}</Text>
             </TouchableOpacity>
-
-            <View style={styles.tableRow}>
-              <Text style={styles.tableRowLabel}>Snooze</Text>
-              <Switch
-                value={snooze}
-                onValueChange={setSnooze}
-                trackColor={{ true: "#34C759", false: "#767577" }}
-                thumbColor="#f4f3f4"
-              />
-            </View>
           </View>
-
-          {/* Delete Alarm Button */}
-          <TouchableOpacity
-            style={styles.deleteButton}
-            onPress={handleDeleteAlarm}
-          >
-            <Text style={styles.deleteButtonText}>Delete Alarm</Text>
-          </TouchableOpacity>
         </View>
       </View>
     </Modal>
@@ -182,14 +146,16 @@ const SettingsSheet = ({ visible, onClose, onSave, currentSettings }) => {
 const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)", // Semi-transparent overlay
+    backgroundColor: "rgba(0, 0, 0, 0.4)",
     justifyContent: "flex-end",
   },
   container: {
-    backgroundColor: "#1C1C1E",
+    backgroundColor: "#ffffff",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    paddingBottom: 20,
+    paddingBottom: 70,
+    borderWidth: 1,
+    borderColor: "#8B4513",
   },
   navBar: {
     flexDirection: "row",
@@ -198,34 +164,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 16,
     paddingBottom: 10,
+    backgroundColor: "#ffffff",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
   },
   navBarTitle: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "600",
+    color: "#F5DEB3",
+    fontSize: 18,
+    fontWeight: "700",
   },
   navBarButtonText: {
-    color: "#0A84FF",
+    color: "#DAA520",
     fontSize: 16,
   },
   timePickerContainer: {
+    backgroundColor: "#ffffff",
     alignItems: "center",
     justifyContent: "center",
     height: 200,
   },
-  timeDisplay: {
-    borderWidth: 1,
-    borderColor: "#3A3A3C",
-    borderRadius: 8,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-  },
-  timeDisplayText: {
-    color: "#fff",
-    fontSize: 32,
-  },
   tableContainer: {
-    backgroundColor: "#2C2C2E",
+    backgroundColor: "#f8f8ff",
     marginHorizontal: 16,
     borderRadius: 8,
     overflow: "hidden",
@@ -237,27 +196,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 14,
     borderBottomWidth: 1,
-    borderBottomColor: "#3A3A3C",
+    borderBottomColor: "#8B4513",
   },
   tableRowLabel: {
-    color: "#fff",
+    color: "#4B3621",
     fontSize: 16,
   },
   tableRowValue: {
-    color: "#8E8E93",
-    fontSize: 16,
-  },
-  deleteButton: {
-    marginTop: 20,
-    marginHorizontal: 16,
-    borderRadius: 8,
-    backgroundColor: "#2C2C2E",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 14,
-  },
-  deleteButtonText: {
-    color: "#FF3B30",
+    color: "#4B3621",
     fontSize: 16,
     fontWeight: "600",
   },
