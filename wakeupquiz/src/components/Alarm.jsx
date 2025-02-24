@@ -57,7 +57,7 @@ export async function sendNotification(hours, minutes, seconds) {
     content: {
       title: "お知らせ",
       body: "これはテスト通知です",
-      sound: "BGM_1.mp3",
+      sound: "../../assets/BGM_1.mp3",
       badge: 1,
     },
     trigger: {

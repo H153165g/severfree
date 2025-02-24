@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Button } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { timeGetter } from "../components/Time";
 import SettingsSheet from "./SettingsSheet";
-
+import { cancelAllScheduledNotifications } from "../components/CancelAlarm";
 const Home = () => {
   const [settings, setSettings] = useState({
     time: "07:00",
@@ -30,6 +30,7 @@ const Home = () => {
   };
 
   const handleToggleAlarm = () => {
+    cancelAllScheduledNotifications();
     setAlarmOn((prev) => !prev);
   };
 
@@ -76,10 +77,7 @@ const Home = () => {
             navigation.navigate("Problem");
           }}
         />
-        <Button
-          title="Send Notification"
-          onPress={handleSendNotification}
-        />
+        <Button title="Send Notification" onPress={handleSendNotification} />
       </View>
     </View>
   );
