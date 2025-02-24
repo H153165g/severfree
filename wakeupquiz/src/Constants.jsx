@@ -15,4 +15,9 @@ export const QUIZ_LIST = [
   },
 ]
 
+export const WORD_LIST = [
+    "シフト演算", "ディープラーニング", "フラグメンテーション", "フォールトトレラント", "LRU",
+    "リスト構造", "二分探索木", "マージソート", "モンテカルロ法", "TypeScript"
+  ];
+
 export const ALARM_STATUS_KEY = "alarmStatus";

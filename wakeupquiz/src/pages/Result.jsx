@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Text, View, Button } from "react-native";
 import { AlarmContext } from "../hooks/useAlarm";
 import { useNotification } from "../hooks/useNotification";
-import { QUIZ_LIST } from "../Constants";
+
 import { useNavigation } from "@react-navigation/native";
 
 const Result = ({ score, setScore }) => {
@@ -10,7 +10,7 @@ const Result = ({ score, setScore }) => {
   const { isAlarmOn, toggleAlarm } = useContext(AlarmContext);
   const { cancelAllNotifications } = useNotification();
 
-  const totalScore = QUIZ_LIST.length;
+  const totalScore = 3;
 
   // アラームを停止
   const stopAlarm = async () => {
