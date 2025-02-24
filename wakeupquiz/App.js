@@ -18,13 +18,25 @@ export default function App() {
   return (
     <AlarmContext.Provider value={{ isAlarmOn, toggleAlarm }}>
       <NavigationContainer ref={navigationRef}>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Home" component={Home} />
+        <Stack.Navigator screenOptions={{ headerBackVisible: false }}>
+          <Stack.Screen name="Quiz alarm" component={Home} />
           <Stack.Screen name="Problem">
-            {() => <Problem score={score} setScore={setScore} />}
+            {() => (
+              <Problem
+                score={score}
+                setScore={setScore}
+                options={{ headerShown: false }}
+              />
+            )}
           </Stack.Screen>
           <Stack.Screen name="Result">
-            {() => <Result score={score} setScore={setScore} />}
+            {() => (
+              <Result
+                score={score}
+                setScore={setScore}
+                options={{ headerShown: false }}
+              />
+            )}
           </Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>

@@ -71,7 +71,7 @@ export async function sendNotification(hour, minute) {
       badge: 1,
     },
     trigger: {
-      seconds: delayInSeconds, // ここを修正！
+      seconds: delayInSeconds,
     },
   });
 
