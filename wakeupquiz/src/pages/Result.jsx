@@ -3,6 +3,8 @@ import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
 import { AlarmContext } from "../hooks/useAlarm";
 import { useNotification } from "../hooks/useNotification";
 import { useNavigation } from "@react-navigation/native";
+// timeGetter のキャンセル関数をインポート
+import { cancelTimeGetter } from "../components/Time";
 
 const Result = ({ score, setScore }) => {
   const navigation = useNavigation();
@@ -11,10 +13,11 @@ const Result = ({ score, setScore }) => {
 
   const totalScore = 3;
 
-  // アラームを停止する処理
   const stopAlarm = async () => {
     await cancelAllNotifications();
     toggleAlarm(false);
+    // timeGetter のループを中断する
+    cancelTimeGetter();
     alert("アラームが解除されました！");
   };
 
