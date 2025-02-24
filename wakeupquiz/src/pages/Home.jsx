@@ -33,10 +33,14 @@ const Home = () => {
   };
 
   // 設定された時間(settings.time)を分解し、timeGetterに渡す
-  const handleSendNotification = () => {
+  const handleSendNotification = async () => {
     const [hourStr, minuteStr] = settings.time.split(":");
     const hour = parseInt(hourStr, 10);
     const minute = parseInt(minuteStr, 10);
+
+    const { cancelAllNotifications } = useNotification();
+
+    await cancelAllNotifications();
     timeGetter(hour, minute);
   };
 

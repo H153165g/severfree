@@ -41,10 +41,8 @@ export function useNotificationListener() {
     };
   }, []);
 }
-
-// 通知を送信する関数
 export async function sendNotification(hours, minutes, seconds) {
-  console.log("通知を送信します...");
+  console.log("通知をスケジュールします...");
 
   const permissionsGranted = await requestPermissions();
   if (!permissionsGranted) {
@@ -52,7 +50,24 @@ export async function sendNotification(hours, minutes, seconds) {
     return;
   }
 
-  // 通知をスケジュールする際にトリガーを指定
+  // 現在の時刻を取得
+  const now = new Date();
+  const scheduledTime = new Date();
+
+  // 指定した時間を設定（秒とミリ秒は0にする）
+  scheduledTime.setHours(hours, minutes, seconds, 0);
+
+  // 過去の時間なら翌日にセット
+  if (scheduledTime <= now) {
+    scheduledTime.setDate(scheduledTime.getDate() + 1);
+  }
+
+  console.log(`通知予定時間: ${scheduledTime.toLocaleString()}`);
+  const delayInSeconds = Math.round(
+    (scheduledTime.getTime() - now.getTime()) / 1000
+  );
+
+  // 通知をスケジュール
   await Notifications.scheduleNotificationAsync({
     content: {
       title: "お知らせ",
@@ -61,12 +76,13 @@ export async function sendNotification(hours, minutes, seconds) {
       badge: 1,
     },
     trigger: {
-      hours: hours,
-      minutes: minutes,
-      seconds: seconds,
+      date: delayInSeconds, // 修正ポイント: `date` を使う
     },
   });
+
+  console.log("通知が正常にスケジュールされました！");
 }
+
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
