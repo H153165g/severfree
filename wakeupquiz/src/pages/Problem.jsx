@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Text, View, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { QUIZ_LIST } from "../Constants";
+import { generateQuiz } from "../hooks/generateQuiz";
 
 const Problem = ({ score, setScore }) => {
   const navigation = useNavigation();
@@ -30,6 +31,12 @@ const Problem = ({ score, setScore }) => {
       navigation.navigate("Result", { total: totalQuestions, correct: score });
     }
   };
+
+  // 呼び出し方 引数:単語, 返り値:オブジェクト{explanation: "解説文", question: "質問文"}
+  (async () => {
+    const response = await generateQuiz("Bluetooth");
+    console.log(response);
+  })();
 
   return (
     <View style={{ padding: 20 }}>
