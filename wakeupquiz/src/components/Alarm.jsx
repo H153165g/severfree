@@ -41,42 +41,37 @@ export function useNotificationListener() {
     };
   }, []);
 }
-export async function sendNotification(hours, minutes, seconds) {
-  console.log("通知をスケジュールします...");
 
-  const permissionsGranted = await requestPermissions();
-  if (!permissionsGranted) {
-    console.log("通知の権限がないため、通知を送信できません");
-    return;
-  }
+export async function sendNotification(hour, minute) {
+  console.log("timeGetter実行:", hour, minute);
 
-  // 現在の時刻を取得
   const now = new Date();
   const scheduledTime = new Date();
-
-  // 指定した時間を設定（秒とミリ秒は0にする）
-  scheduledTime.setHours(hours, minutes, seconds, 0);
+  scheduledTime.setHours(hour, minute, 0, 0);
 
   // 過去の時間なら翌日にセット
   if (scheduledTime <= now) {
     scheduledTime.setDate(scheduledTime.getDate() + 1);
   }
 
-  console.log(`通知予定時間: ${scheduledTime.toLocaleString()}`);
+  // 現在時刻との差分を秒で計算
   const delayInSeconds = Math.round(
     (scheduledTime.getTime() - now.getTime()) / 1000
   );
 
-  // 通知をスケジュール
+  console.log(
+    `通知予定時間: ${scheduledTime.toLocaleString()} (あと ${delayInSeconds} 秒)`
+  );
+
   await Notifications.scheduleNotificationAsync({
     content: {
       title: "お知らせ",
-      body: "これはテスト通知です",
-      sound: "../../assets/BGM_1.mp3",
+      body: "設定した時間になりました！",
+      sound: "default",
       badge: 1,
     },
     trigger: {
-      date: delayInSeconds, // 修正ポイント: `date` を使う
+      seconds: delayInSeconds, // ここを修正！
     },
   });
 

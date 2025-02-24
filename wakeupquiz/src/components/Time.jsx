@@ -1,4 +1,5 @@
 import { sendNotification } from "./Alarm";
+import * as Notifications from "expo-notifications";
 
 // キャンセルフラグ（モジュール内の状態）
 let alarmCanceled = false;
@@ -8,7 +9,6 @@ export const cancelTimeGetter = () => {
   alarmCanceled = true;
 };
 
-// 指定した時刻から1時間にわたって毎秒通知を送る関数
 export const timeGetter = async (hours, minutes) => {
   // アラーム開始時にキャンセルフラグをリセット
   alarmCanceled = false;
