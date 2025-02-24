@@ -1,4 +1,5 @@
 import { sendNotification } from "./Alarm";
+import * as Notifications from "expo-notifications";
 // 通知を1時間にわたって送る関数
 export const timeGetter = async (hours, minutes) => {
   let seconds = 0;
