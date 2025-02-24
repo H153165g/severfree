@@ -12,8 +12,8 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [score, setScore] = useState(0);
-  const { isAlarmOn, toggleAlarm } = useAlarm(); // useAlarm フックを利用
-  useNotification(); // useNotification フックを利用
+  const { isAlarmOn, toggleAlarm } = useAlarm();
+  useNotification();
 
   return (
     <AlarmContext.Provider value={{ isAlarmOn, toggleAlarm }}>
@@ -24,7 +24,7 @@ export default function App() {
             {() => <Problem score={score} setScore={setScore} />}
           </Stack.Screen>
           <Stack.Screen name="Result">
-            {() => <Result score={score} />}
+            {() => <Result score={score} setScore={setScore} />}
           </Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
