@@ -54,15 +54,15 @@ export async function sendNotification(hour, minute) {
     scheduledTime.setDate(scheduledTime.getDate() + 1);
   }
 
-  // 現在時刻との差分を秒で計算
+  // 現在時刻との差分を秒で計算（デバッグ用）
   const delayInSeconds = Math.round(
     (scheduledTime.getTime() - now.getTime()) / 1000
   );
-
   console.log(
     `通知予定時間: ${scheduledTime.toLocaleString()} (あと ${delayInSeconds} 秒)`
   );
 
+  // Dateオブジェクトを直接triggerに指定
   await Notifications.scheduleNotificationAsync({
     content: {
       title: "お知らせ",
@@ -70,9 +70,7 @@ export async function sendNotification(hour, minute) {
       sound: "default",
       badge: 1,
     },
-    trigger: {
-      seconds: delayInSeconds, // ここを修正！
-    },
+    trigger: scheduledTime,
   });
 
   console.log("通知が正常にスケジュールされました！");
