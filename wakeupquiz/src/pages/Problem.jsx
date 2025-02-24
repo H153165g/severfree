@@ -26,8 +26,7 @@ const Problem = ({ score, setScore }) => {
     if (currentQuestion < totalQuestions - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
-      // スコアを渡して `Result` 画面へ遷移
-      navigation.navigate("Result", { total: totalQuestions, correct: score });
+      navigation.navigate("Result");
     }
   };
 

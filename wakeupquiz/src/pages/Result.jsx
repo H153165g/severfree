@@ -3,8 +3,10 @@ import { Text, View, Button } from "react-native";
 import { AlarmContext } from "../hooks/useAlarm";
 import { useNotification } from "../hooks/useNotification";
 import { QUIZ_LIST } from "../Constants";
+import { useNavigation } from "@react-navigation/native";
 
-const Result = ({ score }) => {
+const Result = ({ score, setScore }) => {
+  const navigation = useNavigation();
   const { isAlarmOn, toggleAlarm } = useContext(AlarmContext);
   const { cancelAllNotifications } = useNotification();
 
@@ -17,12 +19,21 @@ const Result = ({ score }) => {
     alert("アラームが解除されました！");
   };
 
+  const backToHome = () => {
+    navigation.popToTop()
+    setScore(0);
+  }
+
   return (
     <View style={{ padding: 20 }}>
       <Text style={{ fontSize: 24 }}>あなたのスコア: {score} / {totalScore} 点</Text>
 
       {isAlarmOn && (
         <Button title="アラームを止める" onPress={stopAlarm} />
+      )}
+
+      {!isAlarmOn && (
+        <Button title="アラーム設定画面に戻る" onPress={backToHome} />
       )}
     </View>
   );
