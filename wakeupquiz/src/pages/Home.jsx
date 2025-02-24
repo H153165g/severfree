@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Button } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { timeGetter } from "../components/Time";
 import SettingsSheet from "./SettingsSheet";
 
 const Home = () => {
@@ -11,6 +13,8 @@ const Home = () => {
   });
   const [showSheet, setShowSheet] = useState(false);
   const [alarmOn, setAlarmOn] = useState(false);
+
+  const navigation = useNavigation();
 
   const handleOpenSheet = () => {
     setShowSheet(true);
@@ -27,6 +31,14 @@ const Home = () => {
 
   const handleToggleAlarm = () => {
     setAlarmOn((prev) => !prev);
+  };
+
+  // 設定された時間(settings.time)を分解し、timeGetterに渡す
+  const handleSendNotification = () => {
+    const [hourStr, minuteStr] = settings.time.split(":");
+    const hour = parseInt(hourStr, 10);
+    const minute = parseInt(minuteStr, 10);
+    timeGetter(hour, minute);
   };
 
   return (
@@ -56,6 +68,19 @@ const Home = () => {
           {alarmOn ? "アラーム停止" : "アラーム開始"}
         </Text>
       </TouchableOpacity>
+
+      <View style={styles.buttonContainer}>
+        <Button
+          title="Go to Problem"
+          onPress={() => {
+            navigation.navigate("Problem");
+          }}
+        />
+        <Button
+          title="Send Notification"
+          onPress={handleSendNotification}
+        />
+      </View>
     </View>
   );
 };
@@ -100,7 +125,7 @@ const styles = StyleSheet.create({
   },
   alarmButton: {
     position: "absolute",
-    bottom: 100,
+    bottom: 150,
     backgroundColor: "#8b4513",
     paddingVertical: 15,
     paddingHorizontal: 40,
@@ -110,6 +135,13 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 20,
     fontWeight: "bold",
+  },
+  buttonContainer: {
+    position: "absolute",
+    bottom: 20,
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "90%",
   },
 });
 

@@ -19,6 +19,9 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
+      },
+      "experimental": {
+        "useBridgeless": false
       }
     },
     "web": {
