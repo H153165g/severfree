@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, TouchableOpacity, ActivityIndicator } from "react-native";
+import { Text, View, TouchableOpacity, ActivityIndicator, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { WORD_LIST } from "../Constants";
 import { generateQuiz } from "../hooks/generateQuiz";
@@ -21,24 +21,22 @@ const Problem = ({ score, setScore }) => {
   const [showFeedback, setShowFeedback] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
 
-  // 問題生成
+  // 問題生成：WORD_LISTからランダムに3単語選び、各単語でgenerateQuiz関数を呼び出す
   useEffect(() => {
     const generateQuizzes = async () => {
-      // WORD_LISTから重複しないランダムな3単語を選ぶ
       let words = shuffleArray(WORD_LIST);
       const selectedWords = words.slice(0, 3);
       
       const quizzes = [];
       for (const word of selectedWords) {
         try {
-          // generateQuiz関数は、引数の単語をもとに{ question, explanation }を返す
+          // generateQuizは{ question, explanation }を返す
           const quizData = await generateQuiz(word);
-          // 正解は word で、その他の選択肢としてWORD_LISTから word を除いた中から3単語をランダムに選ぶ
+          // 正解はword、その他はWORD_LISTから除外した中から3単語選ぶ
           let otherWords = WORD_LIST.filter(w => w !== word);
           otherWords = shuffleArray(otherWords).slice(0, 3);
-          // 正解とその他を混ぜて4択にする
+          // 正解とその他を混ぜて4択の選択肢を生成
           const optionsArray = shuffleArray([word, ...otherWords]);
-          // 各選択肢にA～Dのラベルを付与する
           const optionLabels = ["A", "B", "C", "D"];
           const options = {};
           let correctOptionLetter = "";
@@ -75,7 +73,7 @@ const Problem = ({ score, setScore }) => {
     setShowFeedback(true);
   };
 
-  // 次の問題へ
+  // 次の問題へ進む、もしくは結果画面へ遷移
   const handleNextQuestion = () => {
     setShowFeedback(false);
     if (currentQuestion < quizList.length - 1) {
@@ -87,9 +85,9 @@ const Problem = ({ score, setScore }) => {
 
   if (quizList.length === 0) {
     return (
-      <View style={{ padding: 20 }}>
-        <ActivityIndicator size="large" />
-        <Text>クイズを生成中...</Text>
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="#8b4513" />
+        <Text style={styles.loadingText}>クイズを生成中...</Text>
       </View>
     );
   }
@@ -97,43 +95,139 @@ const Problem = ({ score, setScore }) => {
   const currentQuiz = quizList[currentQuestion];
 
   return (
-    <View style={{ padding: 20 }}>
-      <Text style={{ fontSize: 18, marginBottom: 10 }}>
-        {currentQuestion + 1} / 3 問
-      </Text>
-      {!showFeedback ? (
-        <>
-          <Text style={{ fontSize: 20, marginBottom: 10 }}>
-            {currentQuiz.question}
-          </Text>
-          {["A", "B", "C", "D"].map(letter => (
-            <TouchableOpacity
-              key={letter}
-              onPress={() => handleAnswer(letter)}
-              style={{ padding: 10, marginBottom: 5, backgroundColor: '#ddd' }}
-            >
-              <Text>{currentQuiz.options[`option${letter}`]}</Text>
-            </TouchableOpacity>
-          ))}
-        </>
-      ) : (
-        <>
-          <Text style={{ fontSize: 24, marginBottom: 10 }}>
-            {isCorrect ? "正解！" : "不正解…"}
-          </Text>
-          {!isCorrect && (
-            <Text style={{ fontSize: 18, marginBottom: 5 }}>
-              ✅ 正解: {currentQuiz.options[`option${currentQuiz.answer}`]}
+    <View style={styles.container}>
+      <View style={styles.infoCard}>
+        <Text style={styles.infoText}>{currentQuestion + 1} / 3 問</Text>
+      </View>
+      <View style={styles.quizCard}>
+        {!showFeedback ? (
+          <>
+            <Text style={styles.questionText}>{currentQuiz.question}</Text>
+            {["A", "B", "C", "D"].map(letter => (
+              <TouchableOpacity
+                key={letter}
+                onPress={() => handleAnswer(letter)}
+                style={styles.optionButton}
+              >
+                <Text style={styles.optionText}>{currentQuiz.options[`option${letter}`]}</Text>
+              </TouchableOpacity>
+            ))}
+          </>
+        ) : (
+          <>
+            <Text style={styles.feedbackText}>
+              {isCorrect ? "正解！" : "不正解…"}
             </Text>
-          )}
-          <Text style={{ marginBottom: 10 }}>{currentQuiz.explanation}</Text>
-          <TouchableOpacity onPress={handleNextQuestion} style={{ padding: 10, backgroundColor: '#ddd' }}>
-            <Text>次の問題へ</Text>
-          </TouchableOpacity>
-        </>
-      )}
+            {!isCorrect && (
+              <Text style={styles.correctText}>
+                ✅ 正解: {currentQuiz.options[`option${currentQuiz.answer}`]}
+              </Text>
+            )}
+            <Text style={styles.explanationText}>{currentQuiz.explanation}</Text>
+            <TouchableOpacity onPress={handleNextQuestion} style={styles.nextButton}>
+              <Text style={styles.nextButtonText}>
+                {currentQuestion === quizList.length - 1 ? "結果を見る" : "次の問題へ"}
+              </Text>
+            </TouchableOpacity>
+          </>
+        )}
+      </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#f8f1e4", // 優しいパーチメント調の背景色
+    alignItems: "center",
+    paddingTop: 60,
+    paddingHorizontal: 20,
+  },
+  infoCard: {
+    backgroundColor: "#fefbf3",
+    borderRadius: 16,
+    padding: 10,
+    marginBottom: 20,
+    width: "100%",
+    borderWidth: 1,
+    borderColor: "#c9a66b",
+    shadowColor: "#000",
+    shadowOpacity: 0.15,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 8,
+    elevation: 4,
+    alignItems: "center",
+  },
+  infoText: {
+    fontSize: 18,
+    color: "#5c4033",
+    fontWeight: "500",
+  },
+  quizCard: {
+    backgroundColor: "#fefbf3",
+    borderRadius: 16,
+    padding: 20,
+    width: "100%",
+    borderWidth: 1,
+    borderColor: "#c9a66b",
+    shadowColor: "#000",
+    shadowOpacity: 0.15,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  questionText: {
+    fontSize: 20,
+    marginBottom: 20,
+    color: "#5c4033",
+  },
+  optionButton: {
+    backgroundColor: "#b98d62",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    marginBottom: 15,
+  },
+  optionText: {
+    color: "#fff",
+    fontSize: 18,
+    textAlign: "center",
+  },
+  feedbackText: {
+    fontSize: 24,
+    marginBottom: 10,
+    color: "#5c4033",
+    textAlign: "center",
+  },
+  correctText: {
+    fontSize: 18,
+    marginBottom: 10,
+    color: "#8b4513",
+    textAlign: "center",
+  },
+  explanationText: {
+    fontSize: 16,
+    marginBottom: 20,
+    color: "#5c4033",
+  },
+  nextButton: {
+    backgroundColor: "#8b4513",
+    paddingVertical: 15,
+    paddingHorizontal: 40,
+    borderRadius: 8,
+    alignSelf: "center",
+  },
+  nextButtonText: {
+    color: "#fff",
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  loadingText: {
+    fontSize: 18,
+    marginTop: 20,
+    color: "#5c4033",
+  },
+});
 
 export default Problem;
