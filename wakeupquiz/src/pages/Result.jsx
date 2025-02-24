@@ -10,7 +10,7 @@ const Result = ({ score, setScore }) => {
   const { isAlarmOn, toggleAlarm } = useContext(AlarmContext);
   const { cancelAllNotifications } = useNotification();
 
-  const totalScore = QUIZ_LIST.length
+  const totalScore = QUIZ_LIST.length;
 
   // アラームを停止
   const stopAlarm = async () => {
@@ -20,17 +20,17 @@ const Result = ({ score, setScore }) => {
   };
 
   const backToHome = () => {
-    navigation.popToTop()
+    navigation.popToTop();
     setScore(0);
-  }
+  };
 
   return (
     <View style={{ padding: 20 }}>
-      <Text style={{ fontSize: 24 }}>あなたのスコア: {score} / {totalScore} 点</Text>
+      <Text style={{ fontSize: 24 }}>
+        あなたのスコア: {score} / {totalScore} 点
+      </Text>
 
-      {isAlarmOn && (
-        <Button title="アラームを止める" onPress={stopAlarm} />
-      )}
+      {isAlarmOn && <Button title="アラームを止める" onPress={stopAlarm} />}
 
       {!isAlarmOn && (
         <Button title="アラーム設定画面に戻る" onPress={backToHome} />
