@@ -1,6 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-const ALARM_STATUS_KEY = "alarmStatus";
+import { ALARM_STATUS_KEY } from "../Constants";
 
 // アラーム状態を保存
 export const setAlarmStatus = async (status) => {

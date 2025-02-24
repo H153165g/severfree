@@ -59,6 +59,11 @@ const Problem = ({ score, setScore }) => {
           <Text style={{ fontSize: 24, marginBottom: 10 }}>
             {isCorrect ? "正解！" : "不正解…"}
           </Text>
+          {isCorrect == false &&
+            <Text style={{ fontSize: 18, marginBottom: 5 }}>
+              ✅ 正解: {QUIZ_LIST[currentQuestion][`option${QUIZ_LIST[currentQuestion].answer}`]}
+            </Text>
+          }
           <TouchableOpacity onPress={handleNextQuestion} style={{ padding: 10, backgroundColor: '#ddd' }}>
             <Text>次の問題へ</Text>
           </TouchableOpacity>
