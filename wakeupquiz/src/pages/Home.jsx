@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import SettingsSheet from "./SettingsSheet";
 
-const quizalarm = () => {
+const Home = () => {
   const [settings, setSettings] = useState({
     time: "07:00",
     genre: "基本情報",
@@ -113,4 +113,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default quizalarm;
+export default Home;
