@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Button } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { timeGetter } from "../components/Time";
 import SettingsSheet from "./SettingsSheet";
+import { Notifications } from "expo-notifications";
 const Home = () => {
   const [settings, setSettings] = useState({
     time: "07:00",
@@ -37,10 +38,8 @@ const Home = () => {
     const [hourStr, minuteStr] = settings.time.split(":");
     const hour = parseInt(hourStr, 10);
     const minute = parseInt(minuteStr, 10);
-
-    const { cancelAllNotifications } = useNotification();
-
-    await cancelAllNotifications();
+    console.log(hour, minute);
+    console.log(hour, minute);
     timeGetter(hour, minute);
   };
 
