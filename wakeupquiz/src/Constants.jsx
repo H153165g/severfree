@@ -14,3 +14,5 @@ export const QUIZ_LIST = [
     answer: "D"
   },
 ]
+
+export const ALARM_STATUS_KEY = "alarmStatus";
