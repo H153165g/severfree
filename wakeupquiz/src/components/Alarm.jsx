@@ -42,7 +42,7 @@ export function useNotificationListener() {
   }, []);
 }
 
-export async function timeGetter(hour, minute) {
+export async function sendNotification(hour, minute) {
   console.log("timeGetter実行:", hour, minute);
 
   const now = new Date();
